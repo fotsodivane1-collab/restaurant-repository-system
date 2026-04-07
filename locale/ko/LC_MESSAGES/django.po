@@ -1,0 +1,143 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-14 07:05+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+#: .\myapp\models.py:79 .\myapp\templates\myapp\home.html:751
+msgid "Reserve"
+msgstr ""
+
+#: .\myapp\models.py:80 .\myapp\templates\myapp\home.html:752
+msgid "Order"
+msgstr ""
+
+#: .\myapp\models.py:81 .\myapp\templates\myapp\home.html:781
+#: .\myapp\views.py:110
+msgid "Login"
+msgstr ""
+
+#: .\myapp\models.py:82
+msgid "Register"
+msgstr ""
+
+#: .\myapp\templates\myapp\home.html:750
+msgid "Home"
+msgstr ""
+
+#: .\myapp\templates\myapp\home.html:753
+msgid "Gallery"
+msgstr ""
+
+#: .\myapp\templates\myapp\home.html:754 .\myapp\views.py:111
+msgid "Reviews"
+msgstr ""
+
+#: .\myapp\templates\myapp\home.html:755
+msgid "Menu"
+msgstr ""
+
+#: .\myapp\templates\myapp\home.html:756
+msgid "Contact"
+msgstr ""
+
+#: .\myapp\templates\myapp\home.html:761 .\myapp\views.py:106
+msgid "Open today until 01:00"
+msgstr ""
+
+#: .\myapp\templates\myapp\home.html:766 .\myapp\views.py:107
+msgid "Book Now"
+msgstr ""
+
+#: .\myapp\templates\myapp\home.html:771 .\myapp\views.py:108
+msgid "Order Now"
+msgstr ""
+
+#: .\myapp\templates\myapp\home.html:776 .\myapp\views.py:109
+msgid "Waiting List"
+msgstr ""
+
+#: .\myapp\templates\myapp\home.html:786
+msgid "Indian & Pakistani Specialities"
+msgstr ""
+
+#: .\myapp\views.py:105
+msgid "Welcome to our restaurant"
+msgstr ""
+
+#: .\restaurant\settings.py:132
+msgid "Français"
+msgstr ""
+
+#: .\restaurant\settings.py:133
+msgid "English"
+msgstr ""
+
+#: .\restaurant\settings.py:134
+msgid "Русский"
+msgstr ""
+
+#: .\restaurant\settings.py:135
+msgid "العربية"
+msgstr ""
+
+#: .\restaurant\settings.py:136
+msgid "Español"
+msgstr ""
+
+#: .\restaurant\settings.py:137
+msgid "Català"
+msgstr ""
+
+#: .\restaurant\settings.py:138
+msgid "Italiano"
+msgstr ""
+
+#: .\restaurant\settings.py:139
+msgid "Deutsch"
+msgstr ""
+
+#: .\restaurant\settings.py:140
+msgid "Português"
+msgstr ""
+
+#: .\restaurant\settings.py:141
+msgid "Svenska"
+msgstr ""
+
+#: .\restaurant\settings.py:142
+msgid "简体中文"
+msgstr ""
+
+#: .\restaurant\settings.py:143
+msgid "日本語"
+msgstr ""
+
+#: .\restaurant\settings.py:144
+msgid "Nederlands"
+msgstr ""
+
+#: .\restaurant\settings.py:145
+msgid "한국어"
+msgstr ""
+
+#: .\restaurant\settings.py:146
+msgid "Čeština"
+msgstr ""
+
+#: .\restaurant\settings.py:147
+msgid "Ελληνικά"
+msgstr ""
