@@ -33,7 +33,7 @@ def page_detail(request, slug):
 
 
 def reserve(request):
-    return render(request, 'myapp/reserve.html')
+    return render(request, 'reserve/reserve.html')
 
 
 def order(request):
@@ -98,6 +98,7 @@ def logout_view(request):
     logout(request)
     return redirect('myapp:home')
 
+
 from django.utils.translation import gettext as _
 
 def home(request):
@@ -106,7 +107,7 @@ def home(request):
         'open_status':   _('Open today until 01:00'),
         'book_now':      _('Book Now'),
         'order_now':     _('Order Now'),
-        'waiting_list':  _('Waiting List'),
+        'reserve':  _('reserve'),
         'login':         _('Login'),
         'reviews':       _('Reviews'),
     }

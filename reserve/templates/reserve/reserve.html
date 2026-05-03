@@ -1,0 +1,893 @@
+{% load static %} {% load i18n %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% trans "Reservation" %}</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --gold: #c9a84c;
+        --dark: #1a1a1a;
+        --white: #ffffff;
+        --red: #8b1a1a;
+      }
+      body {
+        font-family: "Montserrat", sans-serif;
+        background: #f5f4f0;
+        color: var(--dark);
+        overflow-x: hidden;
+      }
+
+      /* ── HERO ── */
+      .hero {
+        position: relative;
+        width: 100%;
+        height: 45vh;
+        min-height: 360px;
+        overflow: hidden;
+      }
+      .hero-bg {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.55) 0%,
+            rgba(0, 0, 0, 0.35) 50%,
+            rgba(0, 0, 0, 0.65) 100%
+          ),
+          url("https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1920&q=80");
+        background-size: cover;
+        background-position: center;
+        animation: slowZoom 20s ease-in-out infinite alternate;
+      }
+      @keyframes slowZoom {
+        from {
+          transform: scale(1);
+        }
+        to {
+          transform: scale(1.06);
+        }
+      }
+
+      /* ── NAV ── */
+      nav {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 22px 40px;
+        background: linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.6) 0%,
+          transparent 100%
+        );
+      }
+      .nav-links {
+        display: flex;
+        gap: 36px;
+        list-style: none;
+      }
+      .nav-links a {
+        color: var(--white);
+        text-decoration: none;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        transition: color 0.3s;
+        position: relative;
+      }
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background: var(--gold);
+        transition: width 0.3s;
+      }
+      .nav-links a:hover,
+      .nav-links a.active {
+        color: var(--gold);
+      }
+      .nav-links a.active::after,
+      .nav-links a:hover::after {
+        width: 100%;
+      }
+
+      /* lang button top-right */
+      .lang-btn {
+        position: absolute;
+        right: 40px;
+        top: 18px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        border-radius: 20px;
+        padding: 6px 14px;
+        cursor: pointer;
+        background: transparent;
+        color: var(--white);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        font-family: "Montserrat", sans-serif;
+        transition: all 0.3s;
+      }
+      .lang-btn:hover {
+        border-color: var(--white);
+        background: rgba(255, 255, 255, 0.12);
+      }
+
+      /* ── BREADCRUMB + TITLE ── */
+      .hero-content {
+        position: absolute;
+        bottom: 40px;
+        left: 50px;
+        z-index: 100;
+        color: var(--white);
+      }
+      .breadcrumb {
+        font-size: 11px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 10px;
+      }
+      .breadcrumb a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+      }
+      .breadcrumb a:hover {
+        color: var(--gold);
+      }
+      .hero-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 56px;
+        font-weight: 300;
+        line-height: 1.1;
+        letter-spacing: 1px;
+      }
+
+      /* ── ACTION BUTTONS (right side of hero) ── */
+      .action-buttons {
+        position: absolute;
+        right: 30px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      .action-btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 11px 16px;
+        border: 1px solid rgba(255, 255, 255, 0.75);
+        border-radius: 30px;
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(10px);
+        color: var(--white);
+        text-decoration: none;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        transition: all 0.3s;
+        min-width: 230px;
+        cursor: pointer;
+      }
+      .action-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: var(--white);
+        transform: translateX(-4px);
+      }
+      .action-btn.active {
+        background: rgba(255, 255, 255, 0.18);
+        border-color: var(--white);
+      }
+      .action-btn-icon {
+        width: 30px;
+        height: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        flex-shrink: 0;
+      }
+
+      /* ── MAIN CONTENT ── */
+      .main-content {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 20px 60px;
+      }
+
+      /* info banner */
+      .info-banner {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 20px 24px;
+        margin-bottom: 28px;
+        font-size: 13px;
+        line-height: 1.6;
+        color: #444;
+      }
+      .info-icon {
+        width: 24px;
+        height: 24px;
+        border: 2px solid var(--red);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        color: var(--red);
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+
+      /* stepper */
+      .stepper {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 20px 28px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+      }
+      .stepper::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 80px;
+        right: 80px;
+        height: 1px;
+        background: #ddd;
+        z-index: 0;
+      }
+      .step {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+        z-index: 1;
+        background: #fff;
+        padding: 0 8px;
+      }
+      .step-num {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 1.5px solid #bbb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+        color: #bbb;
+        background: #fff;
+      }
+      .step.active .step-num {
+        background: var(--dark);
+        border-color: var(--dark);
+        color: #fff;
+      }
+      .step-label {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        color: #bbb;
+      }
+      .step.active .step-label {
+        color: var(--dark);
+      }
+
+      /* form panel */
+      .form-panel {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 28px;
+      }
+      .form-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .form-field {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+        min-width: 160px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 12px 16px;
+        background: #fafafa;
+      }
+      .form-field svg {
+        flex-shrink: 0;
+        color: #888;
+      }
+      .form-field input,
+      .form-field select {
+        border: none;
+        background: transparent;
+        font-family: "Montserrat", sans-serif;
+        font-size: 13px;
+        color: var(--dark);
+        width: 100%;
+        outline: none;
+      }
+      .form-field select option {
+        color: var(--dark);
+      }
+      .field-label {
+        font-size: 11px;
+        letter-spacing: 1px;
+        color: #888;
+        margin-bottom: 4px;
+        text-transform: uppercase;
+      }
+      .form-section {
+        margin-bottom: 20px;
+      }
+      .btn-next {
+        margin-top: 24px;
+        padding: 13px 36px;
+        background: var(--dark);
+        color: #fff;
+        border: none;
+        border-radius: 30px;
+        font-family: "Montserrat", sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      .btn-next:hover {
+        background: var(--red);
+      }
+
+      /* ── LANGUAGE MODAL ── */
+      .lang-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        z-index: 999;
+        backdrop-filter: blur(4px);
+        align-items: center;
+        justify-content: center;
+      }
+      .lang-overlay.active {
+        display: flex;
+        animation: overlayIn 0.3s ease;
+      }
+      @keyframes overlayIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .lang-modal {
+        background: #fff;
+        border-radius: 18px;
+        padding: 36px 28px 28px;
+        width: 90%;
+        max-width: 560px;
+        position: relative;
+        animation: modalIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      @keyframes modalIn {
+        from {
+          opacity: 0;
+          transform: scale(0.85) translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+      }
+      .lang-modal-close {
+        position: absolute;
+        top: 14px;
+        left: 14px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 1.5px solid #ccc;
+        background: transparent;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        color: #555;
+        transition: all 0.2s;
+      }
+      .lang-modal-close:hover {
+        background: #f0f0f0;
+        border-color: #999;
+      }
+
+      .lang-modal-header {
+        text-align: center;
+        margin-bottom: 22px;
+      }
+      .lang-modal-header .header-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        margin-bottom: 14px;
+      }
+      .header-line-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        flex: 1;
+      }
+      .header-line-group span {
+        display: block;
+        height: 1px;
+        background: #ddd;
+      }
+      .header-line-group span:last-child {
+        width: 60%;
+      }
+      .translate-icon {
+        width: 56px;
+        height: 56px;
+        border: 2px solid #ccc;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        flex-shrink: 0;
+        font-family: "Cormorant Garamond", serif;
+        font-weight: 600;
+      }
+      .lang-modal-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: #333;
+        letter-spacing: 0.5px;
+      }
+
+      /* grid of language options */
+      .lang-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        max-height: 400px;
+        overflow-y: auto;
+      }
+      .lang-option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 11px 14px;
+        border: 1.5px solid #e8e8e8;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 12px;
+        font-weight: 700;
+        color: #333;
+        letter-spacing: 0.5px;
+        background: #fff;
+        position: relative;
+      }
+      .lang-option:hover {
+        border-color: #bbb;
+        background: #f9f9f9;
+      }
+      .lang-option.selected {
+        border-color: var(--red);
+        background: #fff5f5;
+        color: var(--red);
+      }
+      .lang-code {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        color: #888;
+        background: #f0f0f0;
+        border-radius: 4px;
+        padding: 2px 6px;
+        flex-shrink: 0;
+      }
+      .lang-option.selected .lang-code {
+        background: rgba(139, 26, 26, 0.1);
+        color: var(--red);
+      }
+      .lang-name {
+        flex: 1;
+      }
+      .lang-check {
+        margin-left: auto;
+        color: var(--red);
+        font-size: 14px;
+        display: none;
+        flex-shrink: 0;
+      }
+      .lang-option.selected .lang-check {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ══ HERO ══ -->
+    <section class="hero">
+      <div class="hero-bg"></div>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="/">{% trans "Home" %}</a></li>
+          <li><a href="/reserve/" class="active">{% trans "Reserve" %}</a></li>
+          <li><a href="/order/">{% trans "Order" %}</a></li>
+          <li><a href="/gallery/">{% trans "Gallery" %}</a></li>
+          <li><a href="/reviews/">{% trans "Reviews" %}</a></li>
+          <li><a href="/menu/">{% trans "Menu" %}</a></li>
+          <li><a href="/contact/">{% trans "Contact" %}</a></li>
+        </ul>
+        <button class="lang-btn" onclick="openLangModal()">
+          🌐 <span id="currentLang">FR</span> ▾
+        </button>
+      </nav>
+
+      <!-- breadcrumb + title -->
+      <div class="hero-content">
+        <div class="breadcrumb">
+          <a href="/">{% trans "Home" %}</a> / {% trans "Reservation" %}
+        </div>
+        <h1 class="hero-title">{% trans "Réservation" %}</h1>
+      </div>
+
+      <!-- action buttons -->
+      <div class="action-buttons">
+        <a href="/reserve/" class="action-btn active">
+          <span>{% trans "RÉSERVER MAINTENANT" %}</span>
+          <div class="action-btn-icon">📅</div>
+        </a>
+        <a href="/order/" class="action-btn">
+          <span>{% trans "COMMANDER MAINTENANT" %}</span>
+          <div class="action-btn-icon">🌐</div>
+        </a>
+        <a href="/waitlist/" class="action-btn">
+          <span>{% trans "LISTE D'ATTENTE" %}</span>
+          <div class="action-btn-icon">📋</div>
+        </a>
+        <a href="/login/" class="action-btn">
+          <span>{% trans "CONNEXION" %}</span>
+          <div class="action-btn-icon">👤</div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ══ MAIN CONTENT ══ -->
+    <div class="main-content">
+      <!-- info banner -->
+      <div class="info-banner">
+        <div class="info-icon">ℹ</div>
+        <p>
+          {% trans "Nous vous remercions d'avoir choisi notre restaurant pour la
+          réservation. Pensez à donner votre nom à un de nos serveurs dès lors
+          votre arrivée afin que la promotion soit appliquée — nous vous disons
+          à bientôt !" %}
+        </p>
+      </div>
+
+      <!-- stepper -->
+      <div class="stepper">
+        <div class="step active">
+          <div class="step-num">1</div>
+          <span class="step-label">{% trans "Date" %}</span>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <span class="step-label">{% trans "Horaire" %}</span>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <span class="step-label">{% trans "Convives" %}</span>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <span class="step-label">{% trans "Confirmation" %}</span>
+        </div>
+      </div>
+
+      <!-- form panel -->
+      <div class="form-panel">
+        <div class="form-section">
+          <div class="field-label">{% trans "Date" %}</div>
+          <div class="form-row">
+            <div class="form-field">
+              <svg
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <rect x="3" y="4" width="18" height="18" rx="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+              <input type="date" id="resDate" />
+            </div>
+            <div class="form-field">
+              <svg
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              <input type="time" id="resTime" />
+            </div>
+            <div class="form-field">
+              <svg
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+              </svg>
+              <select id="resGuests">
+                <option value="">{% trans "Guests" %}</option>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8+</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-next" onclick="nextStep()">
+          {% trans "CONTINUE" %} →
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ LANGUAGE MODAL ══ -->
+    <div class="lang-overlay" id="langOverlay" onclick="closeLangModal(event)">
+      <div class="lang-modal">
+        <button class="lang-modal-close" onclick="closeLangModalBtn()">
+          ✕
+        </button>
+
+        <div class="lang-modal-header">
+          <div class="header-icon">
+            <div class="header-line-group">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="translate-icon">A简</div>
+            <div class="header-line-group" style="align-items: flex-end">
+              <span></span><span></span><span style="width: 60%"></span>
+            </div>
+          </div>
+          <p class="lang-modal-title">{% trans "Choose your language" %}:</p>
+        </div>
+
+        <div class="lang-grid">
+          <div
+            class="lang-option selected"
+            onclick="selectLang(this, 'fr', 'FR')"
+          >
+            <span class="lang-code">FR</span>
+            <span class="lang-name">FRANÇAIS</span>
+            <span class="lang-check">✓</span>
+          </div>
+          <div class="lang-option" onclick="selectLang(this, 'en', 'EN')">
+            <span class="lang-code">GB</span>
+            <span class="lang-name">ENGLISH</span>
+            <span class="lang-check">✓</span>
+          </div>
+          <div class="lang-option" onclick="selectLang(this, 'es', 'ES')">
+            <span class="lang-code">ES</span>
+            <span class="lang-name">ESPAÑOL</span>
+            <span class="lang-check">✓</span>
+          </div>
+          <div class="lang-option" onclick="selectLang(this, 'ca', 'CA')">
+            <span class="lang-code">CA</span>
+            <span class="lang-name">CATALAN</span>
+            <span class="lang-check">✓</span>
+          </div>
+          <div class="lang-option" onclick="selectLang(this, 'it', 'IT')">
+            <span class="lang-code">IT</span>
+            <span class="lang-name">ITALIANO</span>
+            <span class="lang-check">✓</span>
+          </div>
+          <div class="lang-option" onclick="selectLang(this, 'de', 'DE')">
+            <span class="lang-code">DE</span>
+            <span class="lang-name">DEUTSCH</span>
+            <span class="lang-check">✓</span>
+          </div>
+          <div class="lang-option" onclick="selectLang(this, 'pt', 'PT')">
+            <span class="lang-code">PT</span>
+            <span class="lang-name">PORTUGUÊS</span>
+            <span class="lang-check">✓</span>
+          </div>
+          <div class="lang-option" onclick="selectLang(this, 'sv', 'SE')">
+            <span class="lang-code">SE</span>
+            <span class="lang-name">SVENSKA</span>
+            <span class="lang-check">✓</span>
+          </div>
+          <div class="lang-option" onclick="selectLang(this, 'zh', 'CN')">
+            <span class="lang-code">CN</span>
+            <span class="lang-name">简体中文</span>
+            <span class="lang-check">✓</span>
+          </div>
+          <div class="lang-option" onclick="selectLang(this, 'ja', 'JP')">
+            <span class="lang-code">JP</span>
+            <span class="lang-name">日本語</span>
+            <span class="lang-check">✓</span>
+          </div>
+          <div class="lang-option" onclick="selectLang(this, 'ru', 'RU')">
+            <span class="lang-code">RU</span>
+            <span class="lang-name">РУССКИЙ</span>
+            <span class="lang-check">✓</span>
+          </div>
+          <div class="lang-option" onclick="selectLang(this, 'ar', 'SA')">
+            <span class="lang-code">SA</span>
+            <span class="lang-name">العربية</span>
+            <span class="lang-check">✓</span>
+          </div>
+          <div class="lang-option" onclick="selectLang(this, 'nl', 'NL')">
+            <span class="lang-code">NL</span>
+            <span class="lang-name">NEDERLANDS</span>
+            <span class="lang-check">✓</span>
+          </div>
+          <div class="lang-option" onclick="selectLang(this, 'ko', 'KR')">
+            <span class="lang-code">KR</span>
+            <span class="lang-name">한국어</span>
+            <span class="lang-check">✓</span>
+          </div>
+          <div class="lang-option" onclick="selectLang(this, 'cs', 'CZ')">
+            <span class="lang-code">CZ</span>
+            <span class="lang-name">ČEŠTINA</span>
+            <span class="lang-check">✓</span>
+          </div>
+          <div class="lang-option" onclick="selectLang(this, 'el', 'GR')">
+            <span class="lang-code">GR</span>
+            <span class="lang-name">ΕΛΛΗΝΙΚΆ</span>
+            <span class="lang-check">✓</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- hidden i18n form -->
+    <form
+      id="langForm"
+      action="/i18n/setlang/"
+      method="POST"
+      style="display: none"
+    >
+      {% csrf_token %}
+      <input type="hidden" name="language" id="langInput" value="fr" />
+      <input type="hidden" name="next" value="/reserve/" />
+    </form>
+
+    <script>
+      // ── Language modal ──
+      function openLangModal() {
+        document.getElementById("langOverlay").classList.add("active");
+        document.body.style.overflow = "hidden";
+      }
+      function closeLangModalBtn() {
+        document.getElementById("langOverlay").classList.remove("active");
+        document.body.style.overflow = "";
+      }
+      function closeLangModal(e) {
+        if (e.target === document.getElementById("langOverlay"))
+          closeLangModalBtn();
+      }
+      function selectLang(el, code, label) {
+        document
+          .querySelectorAll(".lang-option")
+          .forEach((o) => o.classList.remove("selected"));
+        el.classList.add("selected");
+        document.getElementById("currentLang").textContent = label;
+        localStorage.setItem("selectedLang", code);
+        localStorage.setItem("selectedLabel", label);
+        document.getElementById("langInput").value = code;
+        document.getElementById("langForm").submit();
+      }
+      window.addEventListener("DOMContentLoaded", function () {
+        const savedLabel = localStorage.getItem("selectedLabel") || "FR";
+        const savedLang = localStorage.getItem("selectedLang") || "fr";
+        document.getElementById("currentLang").textContent = savedLabel;
+        document.querySelectorAll(".lang-option").forEach(function (opt) {
+          opt.classList.remove("selected");
+          const oc = opt.getAttribute("onclick") || "";
+          if (oc.includes("'" + savedLang + "'")) opt.classList.add("selected");
+        });
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeLangModalBtn();
+      });
+
+      // ── Stepper ──
+      function nextStep() {
+        const date = document.getElementById("resDate").value;
+        const time = document.getElementById("resTime").value;
+        const guests = document.getElementById("resGuests").value;
+        if (!date || !time || !guests) {
+          alert("Please fill in all fields before continuing.");
+          return;
+        }
+        // activate step 2
+        const steps = document.querySelectorAll(".step");
+        steps[1].classList.add("active");
+        alert(
+          "Step 1 complete! Date: " +
+            date +
+            " at " +
+            time +
+            " for " +
+            guests +
+            " guest(s).",
+        );
+      }
+    </script>
+  </body>
+</html>
